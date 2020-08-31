@@ -6,6 +6,16 @@ class List {
         this.init();
     };
 
+    init () {
+        const data = localStorage.setItem(this.notes, 'save ');
+        this.notes = data ? JSON.parse(data) : [];
+    };
+
+     save () {
+        const data = JSON.stringify(this.notes);
+        localStorage.setItem(this.name, data);
+    };
+
     addNote (value) {
         const note = {
             value,
@@ -13,6 +23,7 @@ class List {
             id: Date.now(),
         };
         this.notes = [note, ...this.notes];
+        this.save();
     };
 
     editNote (id, value, confirm) {
@@ -29,24 +40,18 @@ class List {
     
                 return newNote
             });
-        }
+        };
+        this.save();
     };
 
     removeNote (id, confirm) {
         if (confirm) {
             this.notes = this.notes.filter(note => note.id !== id);
         };
+        this.save();
     };
 
-    init () {
-        const data = localStorage.setItem(this.notes, 'save ');
-        this.notes = data ? JSON.parse(data) : [];
-    };
 
-     save () {
-        const data = JSON.stringify(this.notes);
-        localStorage.setItem(this.name, data);
-    };
 };
 
 class ToDoList extends List {
@@ -65,7 +70,8 @@ class ToDoList extends List {
         this.notes = this.notes.map(note => ({
             ...note,
             completed: note.id === id ? !note.completed : note.completed
-        }))
+        }));
+        this.save();
     };
 };
 
