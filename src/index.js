@@ -1,9 +1,10 @@
 class List {
-    notes = [
-        { value: "Js", completed: false, id: 1596559757142 },
-        { value: "World", completed: false, id: 1596559757043 },
-        { value: "Hello", completed: false, id: 1596559756940 },
-    ];
+    notes;
+
+    constructor (name) {
+        this.name = name;
+        this.init();
+    };
 
     addNote (value) {
         const note = {
@@ -34,21 +35,23 @@ class List {
     removeNote (id, confirm) {
         if (confirm) {
             this.notes = this.notes.filter(note => note.id !== id);
-        };note => note.id !== id
+        };
     };
 
-    save() {
-        const dataSave = JSON.stringify(this.notes);
-        localStorage.setItem(this.name , data);
+    init () {
+        const data = localStorage.setItem(this.notes, 'save ');
+        this.notes = data ? JSON.parse(data) : [];
     };
-    download () {
-        this.notes = JSON.parse(localStorage.getItem('notes'))
-      }
+
+     save () {
+        const data = JSON.stringify(this.notes);
+        localStorage.setItem(this.name, data);
+    };
 };
 
 class ToDoList extends List {
 
-    getStatistic = function () {
+    getStatistic () {
         return this.notes.reduce(
             (acc, note) => {
                 note.completed && acc.completed++;
@@ -66,27 +69,31 @@ class ToDoList extends List {
     };
 };
 
-class ContactList {
-    constructor (notes){
-        this.notes = notes
-    };
+class ContactList extends List{
 
     searchForANote = function (value) {
         return this.notes.filter(note => note.value.toString() === value.toString());
     };
 };
 
-const myNewNote = new ToDoList;
+const myNewNote = new ToDoList('firstNote');
 myNewNote.addNote('lala');
-myNewNote.editNote(1596559757142, 'Valera', true);
-/* console.log(myNewNote.getStatistic());
-console.log(myNewNote); */
-
-const myNewNote2 = new ContactList(myNewNote.notes);
-const searchedNote = myNewNote2.searchForANote('World');
-
-/* console.log(myNewNote2)
-console.log(searchedNote)
-
+myNewNote.addNote('lala1');
 console.log(myNewNote);
-console.log(myNewNote2); */
+myNewNote.editNote(1596559757142, 'Valera', true);
+myNewNote.completeNote(1596559757142);
+console.log(myNewNote.getStatistic());
+console.log(myNewNote);
+
+const toDo = new ToDoList('ListSave');
+console.log(toDo);
+
+const myNewNote2 = new ContactList(myNewNote.notes, 'secondNote');
+myNewNote2.addNote('lala');
+myNewNote2.addNote('lala1');
+myNewNote2.addNote('lala2');
+console.log(myNewNote2.searchForANote('lala'));
+console.log(myNewNote2.searchForANote('lala1'));
+
+
+console.log(myNewNote2);
